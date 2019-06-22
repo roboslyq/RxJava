@@ -18,7 +18,8 @@ import io.reactivex.annotations.*;
  * A functional interface that has a {@code subscribe()} method that receives
  * an instance of an {@link ObservableEmitter} instance that allows pushing
  * events in a cancellation-safe manner.
- *
+ * 一个只有一个subscribe()方法的函数式接口，入参为ObservableEmitter。
+ * ObservableEmitter是一个可以发送事件的管理器，它的事件可以安全取消订阅。
  * @param <T> the value type pushed
  */
 public interface ObservableOnSubscribe<T> {

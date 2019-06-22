@@ -1049,6 +1049,7 @@ public final class RxJavaPlugins {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @NonNull
     public static <T> Observable<T> onAssembly(@NonNull Observable<T> source) {
+        //正常情况未设置onObservableAssembly时为空，默认返回source
         Function<? super Observable, ? extends Observable> f = onObservableAssembly;
         if (f != null) {
             return apply(f, source);

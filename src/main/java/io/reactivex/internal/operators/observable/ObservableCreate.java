@@ -24,7 +24,14 @@ import io.reactivex.internal.queue.SpscLinkedArrayQueue;
 import io.reactivex.internal.util.AtomicThrowable;
 import io.reactivex.plugins.RxJavaPlugins;
 
+/**
+ * Observable的默认实现，通过Observeable.create()创建
+ * @param <T>
+ */
 public final class ObservableCreate<T> extends Observable<T> {
+    /**
+     * 具体的元素生产lambda
+     */
     final ObservableOnSubscribe<T> source;
 
     public ObservableCreate(ObservableOnSubscribe<T> source) {
@@ -32,11 +39,22 @@ public final class ObservableCreate<T> extends Observable<T> {
     }
 
     @Override
+    /**
+     * 发射消息
+     */
     protected void subscribeActual(Observer<? super T> observer) {
+        /**
+         * 将订阅者包装到发射器中
+         */
         CreateEmitter<T> parent = new CreateEmitter<T>(observer);
+        /**
+         * 发送第一个消息：订阅事件（直接调用消费者observer对象触发onSubscribe()事件，其参数为个个包含自身的Disposable（Emitter实现了Disposable））
+         */
         observer.onSubscribe(parent);
 
         try {
+            //source为创建生产的lambda实现，parrent参数为Emitter类型。
+            //此处source可以使用while(true)无限循环来实现无限量的消息生产。
             source.subscribe(parent);
         } catch (Throwable ex) {
             Exceptions.throwIfFatal(ex);
@@ -44,24 +62,35 @@ public final class ObservableCreate<T> extends Observable<T> {
         }
     }
 
+    /**
+     * 具体的发射动作抽离出来，单独实现ObservableEmitter接口和Disposable接口
+     * @param <T>
+     */
     static final class CreateEmitter<T>
     extends AtomicReference<Disposable>
     implements ObservableEmitter<T>, Disposable {
 
         private static final long serialVersionUID = -3434801548987643227L;
-
+        /**
+         * 所持有的消费者对象，比如方法subscribe(Observer lambda)中的lambda对象
+         */
         final Observer<? super T> observer;
 
         CreateEmitter(Observer<? super T> observer) {
             this.observer = observer;
         }
 
+        /**
+         * 调用observer的onNext方法
+         * @param t
+         */
         @Override
         public void onNext(T t) {
             if (t == null) {
                 onError(new NullPointerException("onNext called with null. Null values are generally not allowed in 2.x operators and sources."));
                 return;
             }
+            /** 如果示取消订阅，则将元素传给消费者onNext()方法进行消费 **/
             if (!isDisposed()) {
                 observer.onNext(t);
             }
@@ -122,6 +151,9 @@ public final class ObservableCreate<T> extends Observable<T> {
         }
 
         @Override
+        /**
+         * 是否已经取消订阅
+         */
         public boolean isDisposed() {
             return DisposableHelper.isDisposed(get());
         }

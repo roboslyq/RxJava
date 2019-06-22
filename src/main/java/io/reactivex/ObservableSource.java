@@ -17,7 +17,8 @@ import io.reactivex.annotations.*;
 /**
  * Represents a basic, non-backpressured {@link Observable} source base interface,
  * consumable via an {@link Observer}.
- *
+ * 一个生产者(Observable)的父接口，可供消费者(Observer)对其生产的元素进行消费。
+ * 此生产者无背压功能
  * @param <T> the element type
  * @since 2.0
  */
@@ -27,6 +28,7 @@ public interface ObservableSource<T> {
      * Subscribes the given Observer to this ObservableSource instance.
      * @param observer the Observer, not null
      * @throws NullPointerException if {@code observer} is null
+     * 订阅者/消费者发起订阅
      */
     void subscribe(@NonNull Observer<? super T> observer);
 }

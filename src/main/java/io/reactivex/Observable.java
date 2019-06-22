@@ -35,9 +35,12 @@ import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.*;
 
 /**
+ *  ==========########RxJava使用的入口类#########===============
+ *
  * The Observable class is the non-backpressured, optionally multi-valued base reactive class that
  * offers factory methods, intermediate operators and the ability to consume synchronous
  * and/or asynchronous reactive dataflows.
+ * Observable类是无背压，其工厂方法提供多值或者单值，
  * <p>
  * Many operators in the class accept {@code ObservableSource}(s), the base reactive interface
  * for such non-backpressured flows, which {@code Observable} itself implements as well.
@@ -1585,6 +1588,8 @@ public abstract class Observable<T> implements ObservableSource<T> {
 
     /**
      * Provides an API (via a cold Observable) that bridges the reactive world with the callback-style world.
+     * 提供一个API,此API是回调编程风格和响应式编程风格的桥梁。
+     * 即通过此回调方式，实现响应式编程。
      * <p>
      * Example:
      * <pre><code>
@@ -1620,9 +1625,11 @@ public abstract class Observable<T> implements ObservableSource<T> {
      *  <dd>{@code create} does not operate by default on a particular {@link Scheduler}.</dd>
      * </dl>
      *
-     * @param <T> the element type
+     * @param <T> the element type 响应式编程元素类型
      * @param source the emitter that is called when an Observer subscribes to the returned {@code Observable}
+     *                元素的发射器，即Observeable通过此发射器发送元素，而不是Observeable自己亲自发送元素。
      * @return the new Observable instance
+     *
      * @see ObservableOnSubscribe
      * @see ObservableEmitter
      * @see Cancellable
@@ -1632,7 +1639,9 @@ public abstract class Observable<T> implements ObservableSource<T> {
     @SchedulerSupport(SchedulerSupport.NONE)
     public static <T> Observable<T> create(ObservableOnSubscribe<T> source) {
         ObjectHelper.requireNonNull(source, "source is null");
-        return RxJavaPlugins.onAssembly(new ObservableCreate<T>(source));
+        return RxJavaPlugins.onAssembly(//包装Observeable对象
+                new ObservableCreate<T>(source) //创建Observeable对象
+        );
     }
 
     /**
@@ -12255,15 +12264,20 @@ public abstract class Observable<T> implements ObservableSource<T> {
         return ls;
     }
 
+    /**
+     * 此方法定义在父类ObservableSource
+     * @param observer the Observer, not null
+     */
     @SchedulerSupport(SchedulerSupport.NONE)
     @Override
     public final void subscribe(Observer<? super T> observer) {
         ObjectHelper.requireNonNull(observer, "observer is null");
         try {
+            //将observer进行包装,如果有需要
             observer = RxJavaPlugins.onSubscribe(this, observer);
 
             ObjectHelper.requireNonNull(observer, "The RxJavaPlugins.onSubscribe hook returned a null Observer. Please change the handler provided to RxJavaPlugins.setOnObservableSubscribe for invalid null returns. Further reading: https://github.com/ReactiveX/RxJava/wiki/Plugins");
-
+            //订阅消息的核心方法
             subscribeActual(observer);
         } catch (NullPointerException e) { // NOPMD
             throw e;
@@ -12286,6 +12300,8 @@ public abstract class Observable<T> implements ObservableSource<T> {
      * the {@code Observer}; all hooks and basic safeguards have been
      * applied by {@link #subscribe(Observer)} before this method gets called.
      * @param observer the incoming Observer, never null
+     * 此方法实现是由具体的Observable实现者决定。
+     *                 比如使用Observable.create()实例化生产者，则此时对象为ObservableCreate
      */
     protected abstract void subscribeActual(Observer<? super T> observer);
 

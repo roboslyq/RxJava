@@ -34,6 +34,7 @@ public enum DisposableHelper implements Disposable {
      * Checks if the given Disposable is the common {@link #DISPOSED} enum value.
      * @param d the disposable to check
      * @return true if d is {@link #DISPOSED}
+     * 检查订阅者是否已经解除订阅，如果是DISPOSED，表示已经解除。
      */
     public static boolean isDisposed(Disposable d) {
         return d == DISPOSED;
