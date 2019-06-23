@@ -30,6 +30,8 @@ import io.reactivex.parallel.ParallelFlowable;
 import io.reactivex.schedulers.Schedulers;
 /**
  * Utility class to inject handlers to certain standard RxJava operations.
+ * 将一些handlers注入到标准的RxJava相关操作中。
+ * 即对RxJava相关功能使用handler进行增强和扩展
  */
 public final class RxJavaPlugins {
     @Nullable
@@ -1042,6 +1044,7 @@ public final class RxJavaPlugins {
 
     /**
      * Calls the associated hook function.
+     * 调用相关的钩子函数
      * @param <T> the value type
      * @param source the hook's input value
      * @return the value returned by the hook

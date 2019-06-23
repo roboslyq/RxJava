@@ -23,7 +23,9 @@ public final class ObservableMap<T, U> extends AbstractObservableWithUpstream<T,
     final Function<? super T, ? extends U> function;
 
     public ObservableMap(ObservableSource<T> source, Function<? super T, ? extends U> function) {
+        //设置前置观察者
         super(source);
+        //
         this.function = function;
     }
 

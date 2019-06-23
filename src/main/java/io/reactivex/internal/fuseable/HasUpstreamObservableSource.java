@@ -18,13 +18,14 @@ import io.reactivex.ObservableSource;
 /**
  * Interface indicating the implementor has an upstream ObservableSource-like source available
  * via {@link #source()} method.
- *
+ * 有前置可用流(链式调用均需要实现此接口，例如filter(),map()等)
  * @param <T> the value type
  */
 public interface HasUpstreamObservableSource<T> {
     /**
      * Returns the upstream source of this Observable.
      * <p>Allows discovering the chain of observables.
+     * 返回上前置流(ObservableSource)
      * @return the source ObservableSource
      */
     ObservableSource<T> source();
