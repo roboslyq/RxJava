@@ -1630,8 +1630,9 @@ public abstract class Observable<T> implements ObservableSource<T> {
      *                元素的发射器，即Observeable通过此发射器发送元素，而不是Observeable自己亲自发送元素。
      * @return the new Observable instance
      *
-     * @see ObservableOnSubscribe
-     * @see ObservableEmitter
+     * @see ObservableOnSubscribe : 元素发射器，与业务相关，由用户定制。在lambda时代，可以通过lambda函数式来表达。
+     *                              与之对应的抽象为ObservableOnSubscrible。
+     * @see ObservableEmitter  :    具体的发射器，是对用户业务实现的source增强。
      * @see Cancellable
      */
     @CheckReturnValue
