@@ -41,6 +41,12 @@ public final class ObservableCreate<T> extends Observable<T> {
     @Override
     /**
      * 发射消息
+     * observer为链式调用中传入的Observer。
+     * 例如调用路径如下“
+     *  Observable.create()
+     *            .filter()
+     *            .map();
+     *  那么时observer对应filter中的ObservableFilter中的内置消费者FilterObserver
      */
     protected void subscribeActual(Observer<? super T> observer) {
         /**

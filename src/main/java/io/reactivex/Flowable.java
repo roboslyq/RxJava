@@ -38,6 +38,7 @@ import io.reactivex.subscribers.*;
 /**
  * The Flowable class that implements the <a href="https://github.com/reactive-streams/reactive-streams-jvm">Reactive Streams</a>
  * Pattern and offers factory methods, intermediate operators and the ability to consume reactive dataflows.
+ * 带有背压功能的发布者/生产者，Observable不带背压功能。
  * <p>
  * Reactive Streams operates with {@link Publisher}s which {@code Flowable} extends. Many operators
  * therefore accept general {@code Publisher}s directly and allow direct interoperation with other
